@@ -1,0 +1,106 @@
+So hello, my name is Sergey and today we will talk about canvas html5 element
+
+Let's start by looking at the <canvas> HTML element itself.
+Canvas element, now part of HTML5 API
+Used for drawing and animating directly in HTML, with JavaScript scripting, so no script no canvas)
+Originally developed by Apple for Dashboard widgets
+
+At first sight a <canvas> looks like the <img> element, with the only clear difference being that it doesn't have the src and alt attributes. Indeed, the <canvas> element has only two attributes, width and height. These are both optional and can also be set using DOMproperties. When no width and height attributes are specified, the canvas will initially be 300 pixels wide and 150 pixels high. The element can be sized arbitrarily by CSS, but during rendering the image is scaled to fit its layout size: if the CSS sizing doesn't respect the ratio of the initial canvas, it will appear distorted.
+Canvas required closing tag
+If this tag is not present, the rest of the document would be considered the fallback content and wouldn't be displayed.
+
+
+The id attribute isn't specific to the <canvas> element but is one of the global HTML attributes which can be applied to any HTML element (like class for instance). It is always a good idea to supply an id because this makes it much easier to identify it in a script.
+The <canvas> element can be styled just like any normal image (margin, border, background…). These rules, however, don't affect the actual drawing on the canvas. We'll see how this is done later. When no styling rules are applied to the canvas it will initially be fully transparent.
+
+Now we will talk about fallback content
+The <canvas> element differs from an <img> tag in that, like for <video>, <audio>, or <picture> elements, it is easy to define some fallback content, to be displayed in older browsers not supporting it, like versions of Internet Explorer earlier than version 9 or textual browsers. You should always provide fallback content to be displayed by those browsers.
+Providing fallback content is very straightforward: just insert the alternate content inside the <canvas> element. Browsers that don't support <canvas> will ignore the container and render the fallback content inside it. Browsers that do support <canvas> will ignore the content inside the container, and just render the canvas normally.
+For example, we could provide a text description of the canvas content or provide a static image of the dynamically rendered content. This can look something like this:
+
+Telling the user to use a different browser that supports canvas does not help users who can't read the canvas at all, for example. Providing a useful fallback text or sub DOM helps to make the canvas more accessible.
+
+The <canvas> element creates a fixed-size drawing surface that exposes one or more rendering contexts, which are used to create and manipulate the content shown. We focus on the 2D rendering context. Other contexts may provide different types of rendering; for example, WebGL uses a 3D context based on OpenGL ES.
+The canvas is initially blank. To display something, a script first needs to access the rendering context and draw on it. The <canvas> element has a method called getContext(), used to obtain the rendering context and its drawing functions. getContext() takes one parameter, the type of context. For 2D graphics.
+
+The first line in the script retrieves the node in the DOM representing the <canvas> element by calling the document.getElementById() method. Once you have the element node, you can access the drawing context using its getContext() method.
+
+Here is a minimalistic template, which we'll be using as a starting point for later examples.
+
+The script includes a function called draw(), which is executed once the page finishes loading; this is done by listening for the load event on the document. This function, or one like it, could also be called using window.setTimeout(), window.setInterval(), or any other event handler, as long as the page has been loaded first.
+Here is how a template would look in action. As shown here, it is initially blank.
+
+
+To begin, let's take a look at a simple example that draws two intersecting rectangles, one of which has alpha transparency. We'll explore how this works in more detail in later examples.
+
+This example looks like this:
+
+Now that we have set up our canvas environment, we can get into the details of how to draw on the canvas. Next, we will learn how to draw rectangles, triangles, lines, arcs and curves, providing familiarity with some of the basic shapes. 
+
+Before we can start drawing, we need to talk about the canvas grid or coordinate space. Our HTML skeleton from the previous slide had a canvas element 300 pixels wide and 300 pixels high.On slide, you can see this canvas with the default grid overlayed. Normally 1 unit in the grid corresponds to 1 pixel on the canvas. The origin of this grid is positioned in the top leftcorner at coordinate (0,0). All elements are placed relative to this origin. So the position of the top left corner of the blue square becomes x pixels from the left and y pixels from the top, at coordinate (x,y). Later we'll see how we can translate the origin to a different position,but for now we'll stick to the default.
+
+
+Unlike SVG, <canvas> only supports one primitive shape: rectangles. All other shapes must be created by combining one or more paths, lists of points connected by lines. Luckily, we have an assortment of path drawing functions which make it possible to compose very complex shapes.
+First let's look at the rectangle. There are three functions that draw rectangles on the canvas:
+
+
+Each of these three functions takes the same parameters. x and y specify the position on the canvas (relative to the origin) of the top-left corner of the rectangle. width and height provide the rectangle's size.
+
+Here on the slide we can see the draw() function from the previous slide, but now it is making use of these three functions
+
+
+
+The fillRect() function draws a large black square 300 pixels on each side. The clearRect() function then erases a 150x150 pixel square from the center, and then strokeRect() is called to create a rectangular outline 100x100 pixels within the cleared square..
+
+
+
+The only other primitive shapes are paths. A path is a list of points, connected by segments of lines that can be of different shapes, curved or not, of different width and of different color. A path, or even a subpath, can be closed. To make shapes using paths takes some extra steps:
+First, you create the path.
+Then you use drawing commands to draw into the path.
+Once the path has been created, you can stroke or fill the path to render it.
+Here are the functions used to perform these steps:
+
+
+The first step to create a path is to call the beginPath(). Internally, paths are stored as a list of sub-paths (lines, arcs, etc) which together form a shape. Every time this method is called, the list is reset and we can start drawing new shapes.
+
+
+The second step is calling the methods that actually specify the paths to be drawn. We'll see these shortly.
+The third, and an optional step, is to call closePath(). This method tries to close the shape by drawing a straight line from the current point to the start. If the shape has already been closed or there's only one point in the list, this function does nothing.
+
+
+
+For example, the code for drawing a triangle would look something like this:
+
+The result looks like this:
+
+One very useful function, which doesn't actually draw anything but becomes part of the path list described above, is the moveTo() function. You can probably best think of this as lifting a pen or pencil from one spot on a piece of paper and placing it on the next.
+
+When the canvas is initialized or beginPath() is called, you typically will want to use the moveTo() function to place the starting point somewhere else. We could also use moveTo() to draw unconnected paths. Take a look at the smiley face on this slide
+
+To try this for yourself, you can use the code snippet below. Just paste it into the draw()function we saw earlier.
+
+If you'd like to see the connecting lines, you can remove the lines that call moveTo().
+
+For drawing straight lines, use the lineTo() method.
+
+
+This method takes two arguments, x and y, which are the coordinates of the line's end point. The starting point is dependent on previously drawn paths, where the end point of the previous path is the starting point for the following, etc. The starting point can also be changed by using the moveTo() method.
+
+The example below draws two triangles, one filled and one outlined.
+
+
+This starts by calling beginPath() to start a new shape path. We then use the moveTo()method to move the starting point to the desired position. Below this, two lines are drawn which make up two sides of the triangle.
+
+You'll notice the difference between the filled and stroked triangle. This is, as mentioned above, because shapes are automatically closed when a path is filled, but not when they are stroked. If we left out the closePath() for the stroked triangle, only two lines would have been drawn, not a complete triangle.
+
+
+To draw arcs or circles, we use the arc() or arcTo() methods.
+
+Let's have a more detailed look at the arc method, which takes six parameters: x and y are the coordinates of the center of the circle on which the arc should be drawn. radius is self-explanatory. The startAngle and endAngle parameters define the start and end points of the arc in radians, along the curve of the circle. These are measured from the x axis. The anticlockwise parameter is a Boolean value which, when true, draws the arc anticlockwise; otherwise, the arc is drawn clockwise.
+
+The next type of paths available are Bézier curves , available in both cubic and quadratic varieties. These are generally used to draw complex organic shapes.
+
+The x and y parameters in both of these methods are the coordinates of the end point. cp1x and cp1y are the coordinates of the first control point, and cp2x and cp2y are the coordinates of the second control point.
+Using quadratic and cubic Bézier curves can be quite challenging, because unlike vector drawing software like Adobe Illustrator, we don't have direct visual feedback as to what we're doing. This makes it pretty hard to draw complex shapes. 
+
+So that’s enough today, thank you.
