@@ -1,0 +1,323 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>HTML5 &lt;canvas&gt;</title>
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-transition="zoom">
+					<h2 style="color:greenyellow;">INTRODUCTION TO HTML5 &lt;canvas&gt;</h2>
+					<p>Drawing and animation in Browser</p>
+					<p>
+						<small>Created by Siarhei Matsiash aka MSV1990</small>
+					</p>
+				</section>
+				<section data-background-transition="zoom">
+					<h2 style="color:greenyellow;">
+						What is HTML5 &lt;canvas&gt;?
+					</h2>
+					<ul style="color:red;">
+						<li>HTML5 element, now part of HTML5 API</li>
+						<li>Used for drawing and animating directly in HTML, with JavaScript scripting</li>
+						<li>Originally developed by Apple for Dashboard widgets</li>
+					</ul>
+				</section>
+				<section>
+					<h2 style="color:greenyellow">
+						The &lt;canvas&gt; element
+					</h2>
+					<pre><code><canvas id="tutorial" width="300" height="300"></canvas></code></pre>
+					<p style="color:red;">Required &lt;/canvas&gt; tag</p>
+				</section>
+				<section>
+					<h2 style="color:greenyellow;">
+					Fallback content
+				</h2>
+					<pre><code style="width:120%;" data-trim data-line-numbers="2,6">
+						<canvas id="stockGraph" width="300" height="300">
+							current stock price: $3.15 + 0.15
+						  </canvas>
+						  
+						  <canvas id="clock" width="300" height="300">
+							<img src="images/clock.png" width="300" height="300" alt=""/>
+						  </canvas>
+						</code></pre>
+
+				</section>
+				<section>
+					<h2 style="color:greenyellow;">The rendering context</h2>
+					<pre><code>getContext()</code></pre>
+
+					<pre><code data-trim>
+						var canvas = document.getElementById('tutorial');
+						var ctx = canvas.getContext('2d');
+						</code></pre>
+				</section>
+				<section style="top: 0px;">
+						<p style="color:greenyellow;">A skeleton template</p>
+					<pre><code style="max-height:100%;" data-trim>
+						&lt;!DOCTYPE html&gt;
+							&lt;html&gt;
+							&lt;head&gt;
+							<meta charset="utf-8"/>
+							<title>Canvas</title>
+							<script type="text/javascript">
+							  function draw() {
+								var canvas = document.getElementById('tutorial');
+								if (canvas.getContext) {
+								  var ctx = canvas.getContext('2d');
+								}
+							  }
+							</script>
+							<style type="text/css">
+							  canvas { border: 1px solid black; }
+							</style>
+						  </head>
+						  &lt;body onload="draw();"&gt;
+							<canvas id="tutorial" width="300" height="300"></canvas>
+							&lt;/body&gt;
+						  &lt;/html&gt;</code></pre>
+				</section>
+				<section>
+						<canvas style="border: 1px solid black;background-color:white;" id="tutorial" width="300" height="300"></canvas>
+				</section>
+				<section style="top: 0px;">
+					<p style="color:greenyellow; margin:0px auto">A simple example</p>
+					<pre style="margin: 0px auto;"><code style="max-height:100%;" data-trim>
+							&lt;!DOCTYPE html&gt;
+							&lt;html&gt;
+							&lt;head&gt;
+							  <meta charset="utf-8"/>
+							  <script type="application/javascript">
+								function draw() {
+								  var canvas = document.getElementById('canvas');
+								  if (canvas.getContext) {
+									var ctx = canvas.getContext('2d');
+							
+									ctx.fillStyle = 'rgb(200, 0, 0)';
+									ctx.fillRect(50, 50, 150, 150);
+							
+									ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+									ctx.fillRect(80, 80, 150, 150);
+								  }
+								}
+							  </script>
+							 &lt;/head&gt;
+							 &lt;body onload="draw();"&gt;
+							   <canvas id="canvas" width="300" height="300"></canvas>
+							   &lt;/body&gt;
+							   &lt;/html&gt;
+					</code></pre>
+						  
+				</section>
+				<section>
+					<canvas onclick="draw();" style="background-color:white;"  id="canvas" width="300" height="300"></canvas>
+				</section>
+				<section>
+					<h3 style="color:greenyellow;">The grid</h3>
+					<img src="Canvas_default_grid.png" style="width:600px;height:600px"/>
+				</section>
+				<section>
+					<h3 style="color:greenyellow;">Drawing rectangles</h3>
+					<pre><code>fillRect(x, y, width, height)</code></pre>
+				<p style="color:red;">	Draws a filled rectangle.</p>
+					<pre><code>strokeRect(x, y, width, height)</code></pre>
+					<p style="color:red;">Draws a rectangular outline.</p>
+					<pre><code>clearRect(x, y, width, height)</code></pre>
+					<p style="color:red;">Clears the specified rectangular area, making it fully transparent.</p>
+				</section>
+				<section>
+					<p style="color:greenyellow;">Rectangular shape example</p>
+					<pre><code data-trim>
+						<script>
+							function draw2() {
+								var canvas = document.getElementById('canvas2');
+								if (canvas.getContext) {
+									var ctx = canvas.getContext('2d');
+							
+									ctx.fillRect(0, 0, 300, 300);
+									ctx.clearRect(75, 75, 150, 150);
+									ctx.strokeRect(100, 100, 100, 100);
+								}
+							}
+						</script>
+					</code></pre>
+				</section>
+				<section>
+						<canvas onclick="draw2();" style="background-color:white;"  id="canvas2" width="300" height="300"></canvas>
+				</section>
+				<section>
+					<h3 style="color:greenyellow;">Drawing paths</h3>
+				<pre><code>beginPath()</code></pre>	
+<p style="color:red;font-size: 75%">Creates a new path. Once created, future drawing commands are directed into the path and used to build the path up.</p>
+<p>Path methods</p>
+<pre><code>closePath()</code></pre>
+<p style="color:red;font-size: 75%">Adds a straight line to the path, going to the start of the current sub-path.</p>
+<pre><code>stroke()</code></pre> 
+<p style="color:red;font-size: 75%">Draws the shape by stroking its outline.</p>
+<pre><code>fill()</code></pre> 
+<p style="color:red;font-size: 75%">Draws a solid shape by filling the path's content area.</p>
+					
+				</section>
+				<section>
+					<p style="color:greenyellow;">Drawing a triangle</p>
+					<pre><code data-trim>
+						<script>
+							function draw3() {
+								var canvas = document.getElementById('canvas3');
+								if (canvas.getContext) {
+									var ctx = canvas.getContext('2d');
+							
+									ctx.beginPath();
+									ctx.moveTo(75, 50);
+									ctx.lineTo(100, 75);
+									ctx.lineTo(100, 25);
+									ctx.fill();
+								}
+							}
+						</script>
+					</code></pre>
+				</section>
+				<section>
+						<canvas onclick="draw3();" style="background-color:white;"  id="canvas3" width="300" height="300"></canvas>
+				</section>
+
+				<section>
+					<h3>Moving the pen</h3>
+					<pre><code>moveTo(x, y)</code></pre>
+					<p style="color:red;">Moves the pen to the coordinates specified by x and y.</p>
+					
+				</section>
+				<section>
+					<script>
+						function draw4() {
+  var canvas = document.getElementById('canvas4');
+  if (canvas.getContext) {
+     var ctx = canvas.getContext('2d');
+
+    ctx.beginPath();
+    ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
+    ctx.moveTo(110, 75);
+    ctx.arc(75, 75, 35, 0, Math.PI, false);  // Mouth (clockwise)
+    ctx.moveTo(65, 65);
+    ctx.arc(60, 65, 5, 0, Math.PI * 2, true);  // Left eye
+    ctx.moveTo(95, 65);
+    ctx.arc(90, 65, 5, 0, Math.PI * 2, true);  // Right eye
+    ctx.stroke();
+  }
+}
+					</script>
+					<canvas onclick="draw4();" style="background-color:white;"  id="canvas4" width="300" height="300"></canvas>
+				</section>
+
+				<section style="top: 0px;">
+	<pre style="margin: 0px auto;"><code style="max-height:100%;" data-trim>
+					function draw4() {
+					var canvas = document.getElementById('canvas4');
+					if (canvas.getContext) {
+					var ctx = canvas.getContext('2d');
+									
+					ctx.beginPath();
+					ctx.arc(75, 75, 50, 0, Math.PI * 2, true);
+					ctx.moveTo(110, 75);
+					ctx.arc(75, 75, 35, 0, Math.PI, false);
+					ctx.moveTo(65, 65);
+					ctx.arc(60, 65, 5, 0, Math.PI * 2, true);
+					ctx.moveTo(95, 65);
+					ctx.arc(90, 65, 5, 0, Math.PI * 2, true);
+					ctx.stroke();
+					}
+						}
+	</code></pre>
+				</section>
+				<section>
+					<h3 style="color:greenyellow;">Lines</h3>
+					<pre><code data-trim>
+							lineTo(x, y)
+					</code></pre>
+					<p style="color:red;">Draws a line from the current drawing position to the position specified by x and y.</p>
+				</section>
+<section style="top: 0px;">
+	<pre style="margin: 0px auto;"><code style="max-height:100%;" data-trim>
+		<script>
+		function draw5() {
+				var canvas = document.getElementById('canvas5');
+				if (canvas.getContext) {
+					var ctx = canvas.getContext('2d');
+			
+					// Filled triangle
+					ctx.beginPath();
+					ctx.moveTo(25, 25);
+					ctx.lineTo(105, 25);
+					ctx.lineTo(25, 105);
+					ctx.fill();
+			
+					// Stroked triangle
+					ctx.beginPath();
+					ctx.moveTo(125, 125);
+					ctx.lineTo(125, 45);
+					ctx.lineTo(45, 125);
+					ctx.closePath();
+					ctx.stroke();
+				}
+			}
+			</script>
+	</code></pre>
+</section>
+<section>
+		<canvas onclick="draw5();" style="background-color:white;"  id="canvas5" width="300" height="300"></canvas>
+</section>
+<section>
+	<h3 style="color:greenyellow;">Arcs</h3>
+	<pre><code>arc(x, y, radius, startAngle, endAngle, anticlockwise)</code></pre>
+<p style="color:red;">Draws an arc which is centered at (x, y) position with radius r starting at startAngle and ending at endAngle going in the given direction indicated by anticlockwise (defaulting to clockwise).
+		arcTo(x1, y1, x2, y2, radius)</p>
+		<pre><code>arcTo(x1, y1, x2, y2, radius)</code></pre>
+<p style="color:red;">Draws an arc with the given control points and radius, connected to the previous point by a straight line.</p>
+</section>
+<section>
+	<h3 style="color:greenyellow;">Bezier and quadratic curves</h3>
+<pre><code>quadraticCurveTo(cp1x, cp1y, x, y)</code></pre>
+<p style="color:red;">Draws a quadratic Bézier curve from the current pen position to the end point specified by x and y, using the control point specified by cp1x and cp1y.</p>
+<pre><code>bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)</code></pre>
+<p style="color:red;">Draws a cubic Bézier curve from the current pen position to the end point specified by x and y, using the control points specified by (cp1x, cp1y) and (cp2x, cp2y).</p>
+</section>
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
